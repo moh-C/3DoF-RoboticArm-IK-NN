@@ -42,3 +42,22 @@ Huber loss (for the joint loss) vs MSE loss
 | ![Huber Loss Error Distribution](./Figures/HuberLossJoint02fk10.png) | ![Custom Loss Error Distribution](./Figures/CustomLossfk10.png) |
 
 The results show that the Huber Loss model generally performs better, especially for larger errors. The error distribution for the Huber Loss model is more concentrated around zero compared to the Custom Loss model.
+
+
+## Results
+
+We compared two Huber Loss models: one applying Huber Loss to both forward kinematics (FK) and joint angles, and another applying it only to joint angles. Both models use fk=10. The error distribution graphs for both models are presented below, followed by a comparison table.
+
+| Huber Loss (both FK and joint, fk=10) | Huber Loss (joint only, fk=10) |
+|:-------------------------------------:|:------------------------------:|
+| ![Huber Loss Both Error Distribution](./Figures/HyberLossBothfk10.png) | ![Huber Loss Joint Error Distribution](./Figures/HuberLossJoint02fk10.png) |
+
+The results show that applying Huber Loss to both forward kinematics and joint angles generally outperforms applying it to joint angles only. The model with Huber Loss applied to both components demonstrates a higher peak frequency, indicating more predictions with very low error. It also shows a more concentrated error distribution near zero and a narrower overall error range, suggesting more consistent and accurate predictions across various scenarios. The steeper decline in frequency for larger errors indicates better handling of potential outliers or more challenging cases.
+
+| Log Cosh Loss (both, fk=10) | Custom Loss (fk=10) |
+|:---------------------------:|:-------------------:|
+| ![Log Cosh Loss Error Distribution](./Figures/LogCoshfk10.png) | ![Custom Loss Error Distribution](./Figures/CustomLossfk10.png) |
+
+### Log Cosh Loss (both, fk=10)
+
+The Log Cosh Loss model, applied to both forward kinematics and joint angles, shows a concentrated error distribution near zero. This is better than the MSE but still worse than Huber. Huber is actually pretty decent!

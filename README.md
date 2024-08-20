@@ -61,3 +61,9 @@ The results show that applying Huber Loss to both forward kinematics and joint a
 ### Log Cosh Loss (both, fk=10)
 
 The Log Cosh Loss model, applied to both forward kinematics and joint angles, shows a concentrated error distribution near zero. This is better than the MSE but still worse than Huber. Huber is actually pretty decent!
+
+![Huber Loss Error Distribution after 50 epochs of training](./Figures/HyberLossE50Fk10d02.png)
+After 50 epochs of training
+
+
+Changing the delta value to 0.1 and the epochs to 100. Hopefully getting better results.

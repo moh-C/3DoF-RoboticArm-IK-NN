@@ -67,3 +67,55 @@ After 50 epochs of training
 
 
 Changing the delta value to 0.1 and the epochs to 100. Hopefully getting better results.
+
+
+## Activation function result
+MLFlow results for activation function investigation
+![Top 5 Activation functions](./Figures/ActivationFunction/Result.png)
+
+We evaluated several models with different configurations. The table below summarizes their performance metrics:
+
+| Model Name | Duration | 90th Percentile Error | Max Error | Mean Error | Median Error |
+|------------|----------|----------------------|-----------|------------|--------------|
+| Model_1_relu_relu_relu_relu_lr_0.01 | 1.3min | 0.04184273 | 3.64790892 | 0.02460836 | 0.02625200 |
+| Model_3_swish_swish_swish_swish_lr_0.01 | 1.8min | 0.04270539 | 3.59251761 | 0.02516400 | 0.02395946 |
+| Model_4_mish_mish_mish_mish_lr_0.04 | 2.0min | 0.04236185 | 3.65731143 | 0.02574110 | 0.02465255 |
+| Model_3_swish_swish_swish_swish_lr_0.04 | 1.8min | 0.04324990 | 3.10410356 | 0.02605691 | 0.02532476 |
+| Model_1_relu_relu_relu_relu_lr_0.04 | 1.3min | 0.04387920 | 0.92929136 | 0.02616043 | 0.02741017 |
+
+### Analysis
+
+1. **Training Time**: The ReLU models (Model_1) consistently show the fastest training times at 1.3 minutes, while the Mish model (Model_4) takes the longest at 2.0 minutes.
+
+2. **Error Metrics**:
+   - **90th Percentile Error**: All models perform similarly, with errors ranging from 0.0418 to 0.0439.
+   - **Max Error**: Model_1 with lr_0.04 significantly outperforms others, having a max error of 0.929 compared to 3+ for other models.
+   - **Mean Error**: Model_1 with lr_0.01 shows the lowest mean error (0.0246), while Model_3 with lr_0.04 has the highest (0.0261).
+   - **Median Error**: Model_3 with lr_0.01 has the lowest median error (0.0240), while Model_1 with lr_0.04 has the highest (0.0274).
+
+3. **Learning Rate Impact**: 
+   - For Model_1 (ReLU), increasing the learning rate from 0.01 to 0.04 significantly reduced the max error but slightly increased other error metrics.
+   - For Model_3 (Swish), the higher learning rate (0.04) resulted in slightly higher error metrics across the board.
+
+4. **Activation Function Comparison**:
+   - ReLU models show faster training times but mixed results in error metrics.
+   - Swish models demonstrate good performance, particularly with the lower learning rate.
+   - The Mish model shows competitive performance but with the longest training time.
+
+Overall, the choice between these models depends on the specific requirements of the application. If training time is a priority, the ReLU models offer the best speed. For overall error minimization, the Swish model with lr_0.01 provides a good balance. If the goal is to minimize the worst-case scenario (max error), the ReLU model with lr_0.04 stands out significantly.
+
+Result: Up until now, we know that ReLU is the best, LR between 0.01 to 0.04 is the best and also Cosine Learning Scheduler is the best too. Also I cannot emphasize how important HuberLoss is.
+
+Next steps:
+1. Architecture changes
+2. BatchNorms to make it better
+3. Gradient Norm
+4. Regularization (Dropout, L1/L2)
+5. HuberLoss Delta
+6. Ensemble methods
+
+### BatchNorm results
+![BatchNorm](Figures/ActivationFunction/Model_BN_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
+![No BatchNorm](Figures/ActivationFunction/Model_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
+BatchNorm cannot compete with no batchnorm. It takes a LOT longer to train (2x or 3x). Also, to get the the same results, we need 3x or 4x more epochs!
+So at least for this architecture, batchnorm is a no go!

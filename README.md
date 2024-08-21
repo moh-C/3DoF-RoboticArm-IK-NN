@@ -163,7 +163,11 @@ Dropout tends to make the results worse
 So Huber delta can be pushes as low as 0.01 for better results
 
 
+### Multiloss results
+
+
 Next Steps:
 1. Gradient Clipping
 2. Exponential loss
 3. Architecture change
+4. Have a proper test dataset for the 6DoF system

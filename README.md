@@ -109,13 +109,61 @@ Result: Up until now, we know that ReLU is the best, LR between 0.01 to 0.04 is 
 Next steps:
 1. Architecture changes
 2. BatchNorms to make it better
-3. Gradient Norm
+3. Gradient Clip
 4. Regularization (Dropout, L1/L2)
 5. HuberLoss Delta
-6. Ensemble methods
 
 ### BatchNorm results
 ![BatchNorm](Figures/ActivationFunction/Model_BN_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
 ![No BatchNorm](Figures/ActivationFunction/Model_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
 BatchNorm cannot compete with no batchnorm. It takes a LOT longer to train (2x or 3x). Also, to get the the same results, we need 3x or 4x more epochs!
 So at least for this architecture, batchnorm is a no go!
+
+
+## No reg, L1, L2, L1 and L2
+
+#### High Regularization Rate
+High LR
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l2_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_l2_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+
+Low LR
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l2_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_l2_Rate_0.001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+
+#### Low Regularization Rate
+High LR
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l2_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_l2_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+
+Low LR
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l2_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_l1_l2_Rate_0.0001_Dropout_0.0_HuberDelta_0.01_LR_0.001_true_vs_predicted.png)
+
+Regardless of low or high LR, regularization (any type) makes the results worse!
+
+### Dropout
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.01_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.1_HuberDelta_0.01_LR_0.01_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.3_HuberDelta_0.01_LR_0.01_true_vs_predicted.png)
+Dropout tends to make the results worse
+
+### Huber Delta
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.01_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.02_LR_0.05_true_vs_predicted.png)
+![Regularization](./Figures/Regularization/Model_Reg_None_Dropout_0.0_HuberDelta_0.05_LR_0.05_true_vs_predicted.png)
+So Huber delta can be pushes as low as 0.01 for better results
+
+
+Next Steps:
+1. Gradient Clipping
+2. Exponential loss
+3. Architecture change

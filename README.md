@@ -1,6 +1,22 @@
 # Inverse Kinematics Neural Network
 
-This project implements a neural network to solve the inverse kinematics problem for a 3-link robotic arm using TensorFlow and Keras. It compares different loss functions and includes visualization of the results.
+This project implements a neural network to solve the inverse kinematics problem for a 3-link robotic arm using TensorFlow and Keras. It explores various model architectures, loss functions, and optimization techniques to improve performance.
+
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Key Features](#key-features)
+3. [Code Structure](#code-structure)
+4. [Notebooks](#notebooks)
+5. [Results](#results)
+   - [Activation Functions](#activation-functions)
+   - [Batch Normalization](#batch-normalization)
+   - [Regularization](#regularization)
+   - [Dropout](#dropout)
+   - [Huber Loss](#huber-loss)
+   - [Multi-Loss Comparison](#multi-loss-comparison)
+6. [Conclusions](#conclusions)
+7. [Future Work](#future-work)
 
 ## Project Overview
 
@@ -10,16 +26,18 @@ The main goal of this project is to train a neural network that can accurately p
 - Neural network model creation and training
 - Custom loss functions implementation
 - Model evaluation and error analysis
-- Visualization of results
+- Extensive experimentation with various aspects of neural network design and training
+- Comprehensive visualization of results
 
 ## Key Features
 
 - Forward kinematics implementation using TensorFlow
-- Custom loss function combining joint angle prediction and forward kinematics
+- Custom loss functions combining joint angle prediction and forward kinematics
 - Huber loss implementation for robust training
 - Learning rate scheduling with warmup and cosine decay
 - MLflow integration for experiment tracking
-- Visualization of error distributions and true vs predicted values
+- Comprehensive visualization of results and error distributions
+- Exploration of different activation functions, regularization techniques, and model architectures
 
 ## Code Structure
 
@@ -32,6 +50,37 @@ The main goal of this project is to train a neural network that can accurately p
 - `train_and_evaluate_model()`: Trains the model and evaluates its performance
 - `plot_error_distribution()`: Visualizes the error distribution
 - `plot_true_vs_predicted()`: Visualizes true vs predicted values
+
+## Notebooks
+
+1. `MLFlowIK.ipynb`: MLflow integration for experiment tracking
+2. `ComprehensiveViz.ipynb`: Comprehensive visualization of results
+3. `MLFlowActivationFN.ipynb`: Exploration of different activation functions
+4. `GradNormRegularizationHuberDelta.ipynb`: Gradient normalization, regularization, and Huber loss delta tuning
+5. `ExponentialLoss.ipynb`: Experimentation with exponential loss functions
+6. `DifferentArchitectures.ipynb`: Exploration of various model architectures
+7. `CustomLoss.ipynb`: Implementation and testing of custom loss functions
+8. `MLFlow.ipynb`: Additional MLflow experiments and analysis
+
+## Running the Project
+
+### Docker Setup
+
+To run the project in a Docker container with GPU support, use the following command:
+
+```bash
+docker run --rm -it \
+  --name tensorflow-gpu-jupyter \
+  --network host \
+  --gpus all \
+  -v $(pwd):/tf/workdir \
+  -w /tf/workdir \
+  tensorflow/tensorflow:2.10.1-gpu-jupyter
+```
+Or simply run `source script.sh`.
+
+Also you need to install couple of tools, including `mlflow`, `seaborn` and other software packages (I might make a Dockerfile later!).
+To run the experiments and log them, run `mlflow ui` in the working directory!
 
 ## Results
 
@@ -106,18 +155,11 @@ Overall, the choice between these models depends on the specific requirements of
 
 Result: Up until now, we know that ReLU is the best, LR between 0.01 to 0.04 is the best and also Cosine Learning Scheduler is the best too. Also I cannot emphasize how important HuberLoss is.
 
-Next steps:
-1. Architecture changes
-2. BatchNorms to make it better
-3. Gradient Clip
-4. Regularization (Dropout, L1/L2)
-5. HuberLoss Delta
 
 ### BatchNorm results
 ![BatchNorm](Figures/ActivationFunction/Model_BN_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
 ![No BatchNorm](Figures/ActivationFunction/Model_1_relu_relu_relu_relu_lr_0.04_true_vs_predicted.png)
-BatchNorm cannot compete with no batchnorm. It takes a LOT longer to train (2x or 3x). Also, to get the the same results, we need 3x or 4x more epochs!
-So at least for this architecture, batchnorm is a no go!
+In our recent experiments with neural network architectures for inverse kinematics, we discovered that Batch Normalization (BatchNorm) significantly impacted training efficiency and model performance. Contrary to common expectations, models without BatchNorm outperformed those with BatchNorm in both training speed and accuracy. Specifically, BatchNorm models required 2-3 times longer to train and needed 3-4 times more epochs to achieve comparable results. This finding suggests that, at least for our current architecture, omitting BatchNorm leads to more efficient and effective training. These results underscore the importance of empirical testing in neural network design, as conventional wisdom may not always apply to specific use cases.
 
 
 ## No reg, L1, L2, L1 and L2
@@ -164,10 +206,16 @@ So Huber delta can be pushes as low as 0.01 for better results
 
 
 ### Multiloss results
+![FK Loss Types](./Figures/MultiLoss/Comparison.png)
+Clearly huberloss is better than the rest.
+
+![Huberloss](./Figures/MultiLoss/huberlossdeltaLR.png)
+Also, higher LR and lower delta in huber loss seems to achieve the best results!
 
 
-Next Steps:
-1. Gradient Clipping
-2. Exponential loss
-3. Architecture change
-4. Have a proper test dataset for the 6DoF system
+Comparison of high LR and same delta in huber:
+![Huberloss High LR](./Figures/MultiLoss/Model_FKWeight_10_HuberLoss_Delta_0.01_LR_0.05_true_vs_predicted.png)
+![Huberloss High LR](./Figures/MultiLoss/Model_FKWeight_10_HuberLoss_Delta_0.01_LR_0.01_true_vs_predicted.png)
+
+![Huberloss High LR](./Figures/MultiLoss/Model_FKWeight_20_HuberLoss_Delta_0.01_LR_0.01_true_vs_predicted.png)
+![Huberloss High LR](./Figures/MultiLoss/Model_FKWeight_20_HuberLoss_Delta_0.01_LR_0.05_true_vs_predicted.png)
